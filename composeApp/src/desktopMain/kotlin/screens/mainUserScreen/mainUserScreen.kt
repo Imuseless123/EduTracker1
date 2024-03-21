@@ -2,7 +2,7 @@ package screens.mainUserScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -13,7 +13,8 @@ import screens.mainUserScreen.Screens.studentList.studentList
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun mainUserScreen(modifier: Modifier){
+fun mainUserScreen(modifier: Modifier,selection: Int){
+//    var Selection: Int by remember { mutableStateOf(0) };
     Box(modifier = modifier){
         Column(modifier = Modifier.background(color = Color(0xFF3f6375))
             .fillMaxSize()){
@@ -21,18 +22,24 @@ fun mainUserScreen(modifier: Modifier){
                 topBar()
             }
                 
-                Spacer(Modifier.height(25.dp))
+            Spacer(Modifier.height(25.dp))
                 
-            Box(){
-                screachBar()
+            if(selection !=0){
+                Box(){
+                    screachBar()
+                }
             }
-                
-                Spacer(Modifier.height(25.dp))
-                
+
             Box(){
-//                profile()
-//                classList()
-                studentList()
+                if(selection==0){
+                    profile()
+                }
+                if(selection==1){
+                    classList()
+                }
+                if(selection==2){
+                    studentList()
+                }
             }
         }
     }

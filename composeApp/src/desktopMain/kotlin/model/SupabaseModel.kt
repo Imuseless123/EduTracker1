@@ -31,6 +31,7 @@ data class Class(
 @Serializable
 data class StudentRecord (
     val id: Int,
-    val name: String?,
-    val gender: Boolean?,
+    val name: String,
+    val gender: Boolean,
+    val date: String
 )

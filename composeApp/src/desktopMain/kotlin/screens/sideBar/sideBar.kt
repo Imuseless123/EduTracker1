@@ -7,7 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,8 +19,10 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
 import io.ktor.http.HttpMethod.Companion.Post
 
+//var sideBarSelection: Int by remember { mutableStateOf(0) };
+
 @Composable
-fun sideBar(modifier: Modifier){
+fun sideBar(modifier: Modifier,selection: Int,sideBarSelection: (s: Int) -> Unit){
     AppTheme() {
         Box(modifier = modifier){
             Column(modifier = Modifier
@@ -31,9 +34,9 @@ fun sideBar(modifier: Modifier){
                          color = Color(0xFFe0e4d6)
                     )
                 }
-                    sideBarButton("Profile","drawable/home.svg")
-                    sideBarButton("Class List","drawable/graduation-cap.svg")
-                    sideBarButton("Student List","drawable/users-alt.svg")
+                sideBarButton("Profile","drawable/home.svg", ){sideBarSelection(0)}
+                sideBarButton("Class List","drawable/graduation-cap.svg"){sideBarSelection(1)}
+                sideBarButton("Student List","drawable/users-alt.svg"){sideBarSelection(2)}
             }
             
 
@@ -42,9 +45,9 @@ fun sideBar(modifier: Modifier){
 }
 
 @Composable
-fun sideBarButton(buttonName: String, iconPath: String){
+fun sideBarButton(buttonName: String, iconPath: String, sideBarSelection: () -> Unit){
     Box(modifier = Modifier.fillMaxWidth()
-    .clickable {  }){
+    .clickable { sideBarSelection() }){
         Row(){
             Image(painter = painterResource(iconPath),
                 contentScale = ContentScale.Fit,

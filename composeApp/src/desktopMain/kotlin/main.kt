@@ -19,11 +19,11 @@ import viewModel.ClassRoom
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication, title = "EduTracker") {
-        runBlocking {
-            launch {
-                println(SupabaseModel.supabase.from("class").select(columns = Columns.ALL) {  }.decodeList<Class>())
-            }
-        }
+//        runBlocking {
+//            launch {
+//                println(SupabaseModel.supabase.from("class").select(columns = Columns.ALL) {  }.decodeList<Class>())
+//            }
+//        }
         App()
     }
 }
