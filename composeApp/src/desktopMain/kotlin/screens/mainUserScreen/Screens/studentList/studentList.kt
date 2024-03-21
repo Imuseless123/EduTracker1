@@ -6,21 +6,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import model.SupabaseModel
 
 data class StudentRecord (
     val ID: String,
     val Name: String,
     val Gender: String,
     val DOB: String
-    )
+)
 
 @Composable
 fun studentList(){
-    
+    val composableCoroutine = rememberCoroutineScope()
+    composableCoroutine.launch {
+        println(SupabaseModel.supabase.from("student").select(columns = Columns.list("id ,name, gender")) {  }.decodeList<model.StudentRecord>())
+    }
     val tempList= mutableListOf(StudentRecord("1","Long","Male","12/01/2003"))
     Box(modifier = Modifier.fillMaxWidth()){
         Column(modifier = Modifier.fillMaxWidth(0.9f)
