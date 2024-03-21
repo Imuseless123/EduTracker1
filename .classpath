@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path=".gradle/8.4/dependencies-accessors/08b809e62fe4752155c8a917f2196637f19fde4e/sources"/>
+	<classpathentry kind="src" path=".gradle/8.4/dependencies-accessors/c84c5ef430d3d61082ae85fc4bb04c7405dfdced/sources"/>
+	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path=".gradle/8.4/dependencies-accessors/08b809e62fe4752155c8a917f2196637f19fde4e/classes"/>
+</classpath>
