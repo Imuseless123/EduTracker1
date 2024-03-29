@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import model.Class
@@ -48,12 +50,17 @@ data class studentClassInfo(
 @Composable
 fun student_class(id:String, name: String,viewStudentClass: (s:Boolean) -> Unit){
     val addStudent = remember { mutableStateOf(false)}
-    studentClassInfo.initStudentClassInfo(id)
+//    studentClassInfo.initStudentClassInfo(id)
 //    runBlocking {
 //        launch {
 //            SupabaseModel.join()
 //        }
 //    }
+    runBlocking {
+        launch {
+            println(SupabaseModel.supabase.from("class_student").select(columns = Columns.list("student_id(id, name, gender, date), class_id")))
+        }
+    }
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize(0.9f)
             .background(color = Color.White)
