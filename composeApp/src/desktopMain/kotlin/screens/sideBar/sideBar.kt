@@ -16,30 +16,26 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.compose.AppTheme
 import io.ktor.http.HttpMethod.Companion.Post
 
 //var sideBarSelection: Int by remember { mutableStateOf(0) };
 
 @Composable
 fun sideBar(modifier: Modifier,selection: Int,sideBarSelection: (s: Int) -> Unit){
-    AppTheme() {
-        Box(modifier = modifier){
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color(0xFF191c1a))){
-                Box(modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.1f)){
-                    Text("EduTracker",
-                         color = Color(0xFFe0e4d6)
-                    )
-                }
-                sideBarButton("Profile","drawable/home.svg", ){sideBarSelection(0)}
-                sideBarButton("Class List","drawable/graduation-cap.svg"){sideBarSelection(1)}
-                sideBarButton("Student List","drawable/users-alt.svg"){sideBarSelection(2)}
+    Box(modifier = modifier){
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFF191c1a))){
+            Box(modifier = Modifier.fillMaxWidth()
+                .fillMaxHeight(0.1f)){
+                Text("EduTracker",
+                     color = Color(0xFFe0e4d6),
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
-            
-
+            sideBarButton("Profile","drawable/home.svg", ){sideBarSelection(0)}
+            sideBarButton("Class List","drawable/graduation-cap.svg"){sideBarSelection(1)}
+            sideBarButton("Student List","drawable/users-alt.svg"){sideBarSelection(2)}
         }
     }
 }

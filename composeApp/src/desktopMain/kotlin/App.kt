@@ -13,7 +13,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import screens.ScreenOutline
 import screens.loginScreen.loginScreen
 import screens.sideBar.sideBar
-import screens.viewModel.SupabaseService
 
 var userEmailDisplay: String="";
 
@@ -70,7 +69,7 @@ fun App() {
 //            }
 //        }
 //    }
-//    
+//
 //    if(sideBarPopup){
 //        ScreenOutline()
 //    }

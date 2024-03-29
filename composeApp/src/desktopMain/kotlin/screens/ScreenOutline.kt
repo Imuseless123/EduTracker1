@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.compose.AppTheme
 import screens.mainUserScreen.mainUserScreen
 import screens.sideBar.sideBar
 
@@ -17,7 +16,8 @@ fun ScreenOutline(){
     Row(modifier = Modifier.fillMaxSize()){
         var Selection: Int by remember { mutableStateOf(0) };
         sideBar(modifier = Modifier.fillMaxHeight()
-            .fillMaxWidth(0.3f),selection = Selection, sideBarSelection={Selection=it} )
+            .fillMaxWidth(0.3f),
+                selection = Selection, sideBarSelection={Selection=it} )
         mainUserScreen(modifier = Modifier.fillMaxHeight()
             .fillMaxWidth(), selection = Selection)
     }
