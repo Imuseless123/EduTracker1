@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.launch
+import model.SupabaseModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import screens.ScreenOutline
@@ -47,41 +48,33 @@ fun App() {
             repeatMode = RepeatMode.Reverse
         )
     )
-    
-//    Canvas(
-//        modifier = Modifier.fillMaxSize(),
-//        onDraw = {
-//            drawRect(Brush.linearGradient(listOf(color, subColor,sub1Color)))
-//        }
-//    )
-    
+
     var login:Result<String> = Result.failure(Exception("Login fail!"));
     var sideBarPopup by remember {mutableStateOf(false)};
     val coroutineScope = rememberCoroutineScope()
-//    if(!sideBarPopup){
-//        loginScreen(){email, password ->
-//            coroutineScope.launch {
-//                login = SupabaseService.loginEmail(email,password)
-//                if(login==Result.success("Login success")){
-//                    sideBarPopup=true;
-//                    userEmailDisplay=email;
-//                }
-//            }
-//        }
-//    }
-//
-//    if(sideBarPopup){
-//        ScreenOutline()
-//    }
+    if(!sideBarPopup){
+        Canvas(
+            modifier = Modifier.fillMaxSize(),
+            onDraw = {
+                drawRect(Brush.linearGradient(listOf(color, subColor,sub1Color)))
+            }
+        )
+        loginScreen(){email, password ->
+            coroutineScope.launch {
+                login = SupabaseModel.loginEmail(email,password)
+                if(login==Result.success("Login success")){
+                    sideBarPopup=true;
+                    userEmailDisplay=email;
+                }
+            }
+        }
+    }
 
-    ScreenOutline()
+    if(sideBarPopup){
+        ScreenOutline(sideBarPopup = {
+            s -> sideBarPopup = s
+        })
+    }
+
+//    ScreenOutline()
 }
-
-//fun user() = runBlocking{
-//    launch {
-//        supabase.auth.signUpWith(Email) {
-//            email = "stickboy7777@gmail.com"
-//            password = "password"
-//        }
-//    }
-//}

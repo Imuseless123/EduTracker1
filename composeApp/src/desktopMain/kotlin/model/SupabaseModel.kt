@@ -1,5 +1,6 @@
 package model
 
+import androidx.compose.runtime.MutableState
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
@@ -27,6 +28,23 @@ class SupabaseModel {
             //install other modules
         }
 
+        fun user() = runBlocking{
+            launch {
+                supabase.auth.signOut()
+            }
+        }
+
+        fun signUpUser(userEmail: String, userPassword: String){
+            runBlocking{
+                launch {
+                    supabase.auth.signUpWith(Email) {
+                        email = userEmail
+                        password = userPassword
+                    }
+                }
+            }
+        }
+
         suspend fun loginEmail(em: String, pw: String): Result<String>{
             try {
                 val loginResult = supabase.auth.signInWith(Email){
@@ -43,16 +61,20 @@ class SupabaseModel {
         }
 
         suspend fun studentQuery(): List<StudentRecord>{
-            return SupabaseModel.supabase.from("student").select ( columns = Columns.ALL ){}.decodeList<StudentRecord>()
+            return SupabaseModel.supabase.from("student").select ( columns = Columns.ALL ){
+
+            }.decodeList<StudentRecord>()
         }
 
         suspend fun classQuery(): List<Class>{
-            return SupabaseModel.supabase.from("class").select (columns = Columns.ALL){}.decodeList<Class>()
+            return SupabaseModel.supabase.from("class").select (columns = Columns.ALL){
+
+            }.decodeList<Class>()
         }
 
         suspend fun studentClassJoinedStudentRecordQuery(classId:String): List<StudentClassJoinedStudentRecord>{
-            return SupabaseModel.supabase.from("student").select (
-                columns = Columns.list("student_class(class_id), id, name, gender, date"
+            return SupabaseModel.supabase.from("class_student").select (
+                columns = Columns.list("student_id(id, name, gender, date), class_id"
                 )
             ){
                 filter {
@@ -61,13 +83,11 @@ class SupabaseModel {
             }.decodeList<StudentClassJoinedStudentRecord>()
         }
 
-        suspend fun join(): List<test2>{
-            return SupabaseModel.supabase.from("text1").select (
-                columns = Columns.raw("id(id, text1_id)"
-                )
-            ){
-
-            }.decodeList<test2>()
+        suspend fun studentClassJoinedStudentRecordQuery1(): List<StudentRecord>{
+            return SupabaseModel.supabase.from("student").select (
+                columns = Columns.ALL
+            ){}
+            .decodeList<StudentRecord>()
         }
 
         fun addStudent(name: String, gender: String,year: String): Boolean{
@@ -83,6 +103,35 @@ class SupabaseModel {
                         date = year
                     )
                     SupabaseModel.supabase.from("student").insert(addStudent)
+                }
+            }
+
+            return true
+        }
+
+        fun addStudentId(studentId: MutableState<Int>, classId: String, notIn: MutableList<String>): Boolean{
+            if(studentId.value==0){
+                return false
+            }
+            var a:Int =1
+            notIn.forEach {
+                item ->
+                run {
+                    if (studentId.toString() == item) {
+                        a *= (-a)
+                    }
+                }
+            }
+            if(a==-1){
+                return false
+            }
+
+            runBlocking {
+                launch {
+                    SupabaseModel.supabase.from("class_student").insert(StudentClass(
+                        student_id = studentId.value,
+                        class_id = classId.toInt()
+                    ))
                 }
             }
 
@@ -127,6 +176,25 @@ class SupabaseModel {
             return true
         }
 
+        fun deleteStudentClass(id: String): Boolean{
+            try{
+                runBlocking {
+                    launch {
+                        SupabaseModel.supabase.from("class_student")
+                            .delete {
+                                filter {
+                                    eq("student_id",id)
+                                }
+                            }
+                    }
+                }
+            }
+            catch (e: Exception){
+                return false
+            }
+            return true
+        }
+
         fun deleteClass(id: String):Boolean{
             try {
                 runBlocking {
@@ -151,7 +219,10 @@ class SupabaseModel {
 data class Class(
     val id: Int,
     val name: String
-)
+){
+
+}
+
 @Serializable
 data class StudentRecord (
     val id: Int,
@@ -162,26 +233,12 @@ data class StudentRecord (
 
 @Serializable
 data class StudentClass(
-    val studentId: Int,
-    val classId: Int
+    val student_id: Int,
+    val class_id: Int
 )
 
 @Serializable
 data class StudentClassJoinedStudentRecord(
-//    val student: StudentRecord,
-//    val classId: Int
-    val s_c: StudentClass,
-    val id: Int,
-    val name: String,
-    val gender: Boolean,
-    val date: String
-)
-
-data class test1(
-    val id: test2
-)
-
-data class test2(
-    val id: Int,
-    val text1_id: Int
+    val student_id: StudentRecord,
+    val class_id: Int
 )

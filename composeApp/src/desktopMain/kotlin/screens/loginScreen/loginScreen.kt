@@ -1,13 +1,14 @@
 package screens.loginScreen
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.builtin.Email
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import model.SupabaseModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -28,7 +26,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun loginScreen(signUpButtonClick: (Email: String, Password: String)-> Unit) {
-    val coroutineScope = rememberCoroutineScope()
+//    val coroutineScope = rememberCoroutineScope()
+    var signUpMenu by remember { mutableStateOf(false) }
     
     Box(modifier = Modifier.fillMaxSize()){
         Box(Modifier.fillMaxHeight(0.8f)
@@ -37,7 +36,8 @@ fun loginScreen(signUpButtonClick: (Email: String, Password: String)-> Unit) {
             .background(color = Color(0x7743483e))){
             Column(Modifier.align(Alignment.Center)){
                 Box(Modifier.align(Alignment.CenterHorizontally)){
-                    Text(text = "Welcome to EduTracker")
+                    Text(text = "Welcome to EduTracker",
+                        color = Color.White)
                 }
 
                 Spacer(Modifier.height(25.dp))
@@ -52,8 +52,11 @@ fun loginScreen(signUpButtonClick: (Email: String, Password: String)-> Unit) {
                 Box(Modifier.align(Alignment.CenterHorizontally)){
 
                     Column(){
-                        Text(text = "GUEST",
-                             Modifier.align(Alignment.CenterHorizontally))
+                        Box(Modifier.align(Alignment.CenterHorizontally)){
+                            Text(text = "GUEST",
+                                 color = Color.White,
+                                )
+                        }
 
                         Spacer(Modifier.height(25.dp))
 
@@ -61,7 +64,7 @@ fun loginScreen(signUpButtonClick: (Email: String, Password: String)-> Unit) {
                         TextField(value =  userEmail,
                                   onValueChange = {userEmail = it},
                                   maxLines = 1,
-                                  label = { Text("Email") },
+                                  label = { Text("Email",color = Color.White) },
                                   modifier =Modifier.align(Alignment.CenterHorizontally)
                                       .clip(RoundedCornerShape(40.dp))
                                       .width(200.dp)
@@ -74,7 +77,7 @@ fun loginScreen(signUpButtonClick: (Email: String, Password: String)-> Unit) {
                                   onValueChange = {Password = it},
                                   maxLines = 1,
                                   visualTransformation = PasswordVisualTransformation(),
-                                  label = { Text("Password") },
+                                  label = { Text("Password",color = Color.White) },
                                   modifier = Modifier.align(Alignment.CenterHorizontally)
                                       .clip(RoundedCornerShape(40.dp))
                                       .width(200.dp)
@@ -83,23 +86,29 @@ fun loginScreen(signUpButtonClick: (Email: String, Password: String)-> Unit) {
                         Spacer(Modifier.height(25.dp))
 
                         Button(onClick = {
-//                                coroutineScope.launch {
-//                                    SupabaseService.loginEmail(userEmail,Password)
-//                                }
-                            signUpButtonClick(userEmail,Password)
+                            if(!signUpMenu){
+                                signUpButtonClick(userEmail,Password)
+                            }
+                            else{
+                                SupabaseModel.signUpUser(userEmail,Password)
+                            }
                                          },
                                Modifier.align(Alignment.CenterHorizontally)
                                    .clip(RoundedCornerShape(40.dp))
                                    .width(200.dp)
                                    .height(50.dp)){
-                            Text(text = "SIGN IN")
+                            Text(text = if(!signUpMenu) {"SIGN IN"} else{"SIGN UP"},
+                                 color = Color.White)
                         }
 
                         Row(Modifier.align(Alignment.CenterHorizontally)){
-                            Text(text = "Don't have an account?")
-                            Text(text = " sign up",
+                            Text(text = if(!signUpMenu) {"Don't have an account?"} else{"Have an account?"},
+                                 color = Color.White)
+                            Text(text = if(!signUpMenu) {"sign up"} else{"sign in"},
                                  color = Color.Blue,
-                                 modifier = Modifier.clickable {  })
+                                 modifier = Modifier.clickable {
+                                     signUpMenu=!signUpMenu
+                                 })
                         }
                     }
                 }

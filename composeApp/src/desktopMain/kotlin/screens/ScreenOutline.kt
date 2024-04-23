@@ -12,13 +12,15 @@ import screens.mainUserScreen.mainUserScreen
 import screens.sideBar.sideBar
 
 @Composable
-fun ScreenOutline(){
+fun ScreenOutline(sideBarPopup: (s:Boolean) -> Unit){
     Row(modifier = Modifier.fillMaxSize()){
         var Selection: Int by remember { mutableStateOf(0) };
         sideBar(modifier = Modifier.fillMaxHeight()
             .fillMaxWidth(0.3f),
                 selection = Selection, sideBarSelection={Selection=it} )
         mainUserScreen(modifier = Modifier.fillMaxHeight()
-            .fillMaxWidth(), selection = Selection)
+            .fillMaxWidth(), selection = Selection, sideBarPopup = {
+                s -> sideBarPopup(s)
+            })
     }
 }

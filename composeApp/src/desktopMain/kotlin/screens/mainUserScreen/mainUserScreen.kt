@@ -14,7 +14,7 @@ import screens.mainUserScreen.Screens.studentList.studentList
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun mainUserScreen(modifier: Modifier,selection: Int){
+fun mainUserScreen(modifier: Modifier,selection: Int, sideBarPopup: (s:Boolean) -> Unit){
     var viewStudentClass: Boolean by remember { mutableStateOf(false) };
     var returnedClassId: String by remember { mutableStateOf("")}
     var returnedClassName: String by remember { mutableStateOf("")}
@@ -22,16 +22,18 @@ fun mainUserScreen(modifier: Modifier,selection: Int){
         Column(modifier = Modifier.background(color = Color(0xFF3f6375))
             .fillMaxSize()){
             Box(){
-                topBar()
+                topBar(sideBarPopup = {
+                    s ->  sideBarPopup(s)
+                })
             }
                 
-            if(selection !=0){
-                Spacer(Modifier.height(25.dp))
-                
-                Box(){
-                    screachBar()
-                }
-            }
+//            if(selection !=0){
+//                Spacer(Modifier.height(25.dp))
+//
+//                Box(){
+//                    screachBar()
+//                }
+//            }
 
             Box(){
                 if(selection==0){

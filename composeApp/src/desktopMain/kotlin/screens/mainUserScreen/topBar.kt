@@ -12,10 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import model.SupabaseModel
 import userEmailDisplay
 
 @Composable
-fun topBar(){
+fun topBar(sideBarPopup: (s:Boolean) -> Unit){
     Box(){
         Row(modifier = Modifier.background(Color.White)
             .fillMaxHeight(0.1f)){
@@ -23,8 +24,8 @@ fun topBar(){
                 .align(Alignment.CenterVertically)
                 .padding(start = 10.dp)){
                 Text("User")
-//                Text(userEmailDisplay)
-                Text("tesingUserEmail")
+                Text(userEmailDisplay)
+//                Text("tesingUserEmail")
             }
             Box(modifier = Modifier.fillMaxWidth()
                 .align(Alignment.CenterVertically)){
@@ -37,7 +38,10 @@ fun topBar(){
                               contentScale = ContentScale.Fit,
                               contentDescription = null,
                               modifier = Modifier.size(20.dp)
-                                  .clickable {  })
+                                  .clickable {
+                                      sideBarPopup(false)
+                                      SupabaseModel.user()
+                                  })
                     }
                 }
 
